@@ -45,46 +45,61 @@ public class Reader {
                 default: System.exit(0);    //will exit the program
         }
         man.setCurrentOffice(which);
-        System.out.println("How many mails are there?");
-        int num = sc.nextInt();
-        sc.nextLine();  //buffer line
-        Setter[] setHold = new Setter[num];
-        for(int z=0;z<num;z++) {    //will ask z number of times for mail address
-            System.out.println("Input Delivery " + (z+1) + " : ");
-            address = sc.nextLine();
-            for(int c=0;c<setting.size();c++){   //checks the entire list for the same address
-                if (address.equalsIgnoreCase(setting.get(c).getDestination())) {
-                    setHold[a]=setting.get(c);
-                    if(setHold[a].getPostOffice().equalsIgnoreCase(man.getCurrentOffice())) {
-                        System.out.println("1");
-                        man.addMail(setting.get(c));
-                        m++;
+        do {
+            System.out.println("How many mails are there?");
+            int num = sc.nextInt();
+            sc.nextLine();  //buffer line
+            ArrayList<Setter> temp = new ArrayList<>();
+            for (int z = 0; z < num; z++) {    //will ask z number of times for mail address
+                System.out.println("Input Delivery " + (z + 1) + " : ");
+                address = sc.nextLine();
+                for (int c = 0; c < setting.size(); c++) {   //checks the entire list for the same address
+                    if (address.equalsIgnoreCase(setting.get(c).getDestination())) {
+                        temp.add(setting.get(c));
+                        if (temp.get(a).getPostOffice().equalsIgnoreCase(man.getCurrentOffice())) {
+                            System.out.println("1");
+                            man.addMail(setting.get(c));
+                            m++;
+                        } else {
+                            System.out.println("2");
+                            man.addHold(setting.get(c));
+                        }
+                        a++;
                     }
-                    else{
-                        System.out.println("2");
-                        man.addHold(setting.get(c));
-                    }
-                    a++;
                 }
             }
-        }
 
-        man.displayMail();
+        /*man.displayMail();
         System.out.println(" ");
         man.displayHold();
         System.out.println(" ");
+        System.out.println("NEXT");
+        System.out.println(" ");*/
 
-        for(int u=0;u<m-1;u++) {
-            for (int k = 0; k <m-u-1; k++) {
-                if (man.getMail().get(k).getDistance() > man.getMail().get(k+1).getDistance()) {
-                    Setter temp = man.getMail().get(k);
-                    man.setMail(man.getMail().get(k + 1), k);
-                    man.setMail(temp, (k + 1));
+            for (int u = 0; u < m - 1; u++) {
+                for (int k = 0; k < m - u - 1; k++) {
+                    if (man.getMail().get(k).getDistance() > man.getMail().get(k + 1).getDistance()) {
+                        Setter move = man.getMail().get(k);
+                        man.setMail(man.getMail().get(k + 1), k);
+                        man.setMail(move, (k + 1));
+                    }
                 }
             }
-        }
+            //1st batch of mails delivered
+            //man.displayMail();
+            man.clearMail();
+            man.addAllHoldToMail(man.getHold());
+            man.clearHold();
+            temp.clear();
+            a=0;
+            m=0;
 
-        man.displayMail();
+            man.displayMail();
+            System.out.println("NEXT");
+            man.displayHold();
+            if(!(man.getMail().isEmpty()))
+                man.setCurrentOffice(man.getMail().get(0).getPostOffice());
+        }while(!(man.getMail().isEmpty()));
     }
 
     public static void main(String[] args) {
@@ -100,8 +115,5 @@ public class Reader {
         int menu = sc.nextInt();
 
         r.mailMan(menu);
-
-        //for (int i=0;i<r.setting.length;i++)
-            //r.setting[i].display();
     }
 }
