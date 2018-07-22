@@ -11,7 +11,7 @@ public class Reader {
 
         String buffer;
         String[] column;
-        try (BufferedReader read = new BufferedReader(new FileReader("/Users/Jeff/Desktop/To Do/Map.csv"))) {   //reads .csv file
+        try (BufferedReader read = new BufferedReader(new InputStreamReader(new FileInputStream("/Users/Jeff/Desktop/To Do/Map.csv"),"ISO-8859-1"))) {   //reads .csv file
             read.readLine();    //skips first line (titles etc.)
             while ((buffer = read.readLine()) != null) {    //will loop until no more lines are found
                 column = buffer.split(",");     //splits data into columns by the comma
@@ -22,6 +22,9 @@ public class Reader {
         catch (IOException e) {     //cancels out errors
             e.printStackTrace();
         }
+
+        //for(int i=0;i<setting.size();i++)
+        //    System.out.println(setting.get(i).getLocation());
     }
 
     public void mailMan(int city){

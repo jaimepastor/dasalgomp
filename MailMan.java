@@ -30,6 +30,18 @@ public class MailMan {
         hold.set(i,del);
     }
 
+    public void addAllHoldToMail(ArrayList<Setter> del){
+        mail.addAll(del);
+    }
+
+    public void clearMail(){
+        mail.clear();
+    }
+
+    public void clearHold(){
+        hold.clear();
+    }
+
     public void setCurrentOffice(String currentOffice) {
         this.currentOffice = currentOffice;
     }
